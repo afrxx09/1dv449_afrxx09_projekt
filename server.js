@@ -9,7 +9,14 @@ var authController = require('./controllers/auth');
 var mongodbString =
 	process.env.MONGOLAB_URI ||
 	'mongodb://localhost:27017/beer';
-mongoose.connect(mongodbString);
+
+mongoose.connect(mongodbString, function (err, res) {
+	if(err)
+		console.log ('ERROR connecting to: ' + mongodbString + '. ' + err);
+	else
+		console.log ('Succeeded connected to: ' + mongodbString);
+});
+var port = process.env.PORT || 5000;
 
 var app = express();
 app.use(express.static(__dirname + '/public'));
@@ -50,5 +57,5 @@ app.use('/', staticRouter);
 
 
 
-app.listen(3000);
-console.log('Server started on port: ' + 3000);
+app.listen(port);
+console.log('Server started on port: ' + port);
