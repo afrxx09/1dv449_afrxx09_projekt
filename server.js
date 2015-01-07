@@ -6,12 +6,11 @@ var userController = require('./controllers/user');
 var passport = require('passport');
 var authController = require('./controllers/auth');
 
-var uristring =
-process.env.MONGOLAB_URI ||
-process.env.MONGOHQ_URL ||
-'mongodb://localhost:27017/beer';
+var mongodbString =
+	process.env.MONGOLAB_URI ||
+	'mongodb://localhost:27017/beer';
+mongoose.connect(mongodbString);
 
-mongoose.connect(uristring);
 var app = express();
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({'extended':'true'}));
