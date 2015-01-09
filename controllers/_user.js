@@ -21,16 +21,16 @@ exports.getUsers = function(req, res){
 		res.json(users);
 	});
 };
-/*
+
 exports.getUser = function(req, res){
-	
+	User.findOne({_id: req.user._id}, function(err, user){
+		if(err) res.send(err);
+		res.json(user);
+	});
 };
 
 exports.putUser = function(req, res){
-	
+	User.update({_id: req.user._id}, {username: req.body.username}, function(err, num, raw){
+		res.json({message: num + ' updated.'});
+	});
 };
-
-exports.deleteUser = function(req, res){
-	
-};
-*/

@@ -1,4 +1,7 @@
-html *{
-	margin:0;
-	padding:0;
+body {
+	padding-top:50px;
+}
+
+#main-content{
+	padding:20px 0;
 }

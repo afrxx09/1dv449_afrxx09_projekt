@@ -17,6 +17,8 @@ mongoose.connect(mongodbString, function (err, res) {
 		console.log ('Succeeded connected to: ' + mongodbString);
 });
 
+require('./passport_config')(passport);
+
 app.use(expressLayouts);
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({'extended':'true'}));
@@ -27,7 +29,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.set('view engine', 'ejs');
 
-require('./routes.js')(app);
+require('./routes.js')(app, passport);
 
 app.listen(port);
 console.log('Server started on port: ' + port);

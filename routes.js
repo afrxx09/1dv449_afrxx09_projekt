@@ -1,9 +1,12 @@
 var express = require('express');
-var beerController = require('./controllers/beer');
-var userController = require('./controllers/user');
-var authController = require('./controllers/auth');
+var beerC = require('./controllers/beer');
 
-module.exports = function(app){
+module.exports = function(app, passport){
+	app.get('*', function(req, res, next) {
+		res.locals.user = req.user || null;
+		next();
+	});
+
 	var staticRouter = express.Router();
 	staticRouter.use(function(req, res, next) {
 	    console.log(req.method, req.url);
@@ -12,9 +15,35 @@ module.exports = function(app){
 	staticRouter.get('/', function(req, res){
 		res.render('index');
 	});
+	staticRouter.get('/profile', isLoggedIn, function(req, res){
+		res.render('profile');
+	});
+
 	staticRouter.get('/login', function(req, res){
 		res.render('login');
 	});
+	staticRouter.post('/login', passport.authenticate('local-login', {
+        successRedirect : '/',
+        failureRedirect : '/login'
+    }));
+	staticRouter.get('/logout', function(req, res) {
+        req.logout();
+        res.redirect('/');
+    });
+
+	staticRouter.get('/signup', function(req, res){
+		res.render('signup');
+	});
+	staticRouter.post('/signup', passport.authenticate('local-signup', {
+		successRedirect: '/',
+		failureRedirect: '/signup'
+	}));
+
+	app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+	app.get('/auth/google/callback', passport.authenticate('google', {
+		successRedirect : '/profile',
+		failureRedirect : '/'
+	}));
 
 	var apiRouter = express.Router();
 	apiRouter.use(function(req, res, next) {
@@ -22,18 +51,20 @@ module.exports = function(app){
 	    next(); 
 	});
 	apiRouter.route('/beers')
-		.post(authController.isAuthenticated, beerController.postBeers)
-		.get(authController.isAuthenticated, beerController.getBeers);
+		.post(isLoggedIn, beerC.postBeers)
+		.get(isLoggedIn, beerC.getBeers);
 	apiRouter.route('/beer/:beer_id')
-		.get(authController.isAuthenticated, beerController.getBeer)
-		.put(authController.isAuthenticated, beerController.putBeer)
-		.delete(authController.isAuthenticated, beerController.deleteBeer);
-
-	apiRouter.route('/users')
-		.post(userController.postUsers)
-		.get(authController.isAuthenticated, userController.getUsers);
+		.get(isLoggedIn, beerC.getBeer)
+		.put(isLoggedIn, beerC.putBeer)
+		.delete(isLoggedIn, beerC.deleteBeer);
 
 	app.use('/api', apiRouter);
 	app.use('/', staticRouter);
 	app.use(express.static(__dirname + '/public'));
 };
+
+function isLoggedIn(req, res, next){
+    if (req.isAuthenticated())
+        return next();
+    res.redirect('/login');
+}
