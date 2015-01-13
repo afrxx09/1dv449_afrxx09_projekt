@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-md-4 col-md-offset-4">
-		<h2>Sign up</h2>
+		<h2>Connect Local account</h2>
 		<%
 		if(message && message.length > 0) {
 			for(var i = 0; i < message.length; i++){
@@ -10,7 +10,7 @@
 			}
 		}
 		%>
-		<form action="/signup" method="post">
+		<form action="/connect/local" method="post">
 		    <div class="form-group">
 		        <label for="firstName">First name</label>
 		        <input type="text" class="form-control" name="firstName" id="firstName">
@@ -32,7 +32,7 @@
 		        <input type="password" class="form-control" name="password_confirm" id="password_confirm">
 		    </div>
 
-		    <button type="submit" class="btn btn-warning btn-lg">Signup</button>
+		    <button type="submit" class="btn btn-warning btn-lg">Connect</button>
 		</form>
 	</div>
 </div>

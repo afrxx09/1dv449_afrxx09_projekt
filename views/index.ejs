@@ -1,12 +1,26 @@
 <div class="row">
 	<div class="col-md-5 col-md-offset-0">
+		<% if(user){ %>
+			<h3>Beer search</h3>
+			<form method="post" action="beersearch">
+				<input id="beerSearch" class="form-control" type="text" name="beerSearch" placeholder="Beer search" />
+				<button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
+			</form>
+		<% } else { %>
 		<h3>Information</h3>
+		<% } %>
 	</div>
 	<div class="col-md-3 col-md-offset-2">
-		<form class="form-signin" method="post" action="/login">
-			<h3 class="form-signin-heading">Sign in</h3>
+		<% if(user){ %>
+		<p>
+            <strong>First name</strong>: <%= user.firstName %><br />
+            <strong>Last name</strong>: <%= user.lastName %><br />
+        </p>
+		<% } else { %>
+		<form method="post" action="/login">
+			<h3>Sign in</h3>
 			<label for="email" class="sr-only">Email</label>
-			<input type="email" name="email" id="email" class="form-control" placeholder="Email" required autofocus>
+			<input type="text" name="email" id="email" class="form-control" placeholder="Email" required autofocus>
 			<label for="password" class="sr-only">Password</label>
 			<input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
 			<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
@@ -19,6 +33,7 @@
 			or<br />
 			<a href="/signup">Sign up</a>
 		</p>
+		<% } %>
 	</div>
 </div>
 <div class="row">

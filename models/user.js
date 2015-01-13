@@ -2,10 +2,19 @@ var mongoose = require('mongoose');
 var bcrypt   = require('bcrypt-nodejs');
 
 var userSchema = mongoose.Schema({
-    firstName : String,
-    lastName : String,
+    firstName : {
+        type: String,
+        required: [true, 'First name required']
+    },
+    lastName : {
+        type: String,
+        required: true
+    },
     local : {
-        email : String,
+        email : {
+            type: String,
+            match: [/^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/, 'Invalid e-mail adress.']
+        },
         password : String,
     },
     google : {
