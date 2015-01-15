@@ -8,7 +8,13 @@ var userSchema = mongoose.Schema({
     },
     lastName : {
         type: String,
-        required: true
+        required: [true, 'Last name required']
+    },
+    city : {
+        type: String
+    },
+    Country : {
+        type: String
     },
     local : {
         email : {

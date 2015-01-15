@@ -38,3 +38,15 @@ exports.deleteBeer = function(req, res){
 		res.json({message: 'Beer removed!'});
 	})
 };
+
+exports.search = function(req, res){
+	Beer.find({ name : {$regex: req.body.beerSearch, $options: 'i' } }, function(err, r){
+		if(err) console.log(err);
+		r = (r.length > 0) ? r : null;
+        res.render('beersearch', {beers : r, 'searchString' : req.body.beerSearch});
+	});
+}
+
+exports.searchResults = function(req, res){
+	res.render('beersearch', {beers: null, 'searchString' : null});
+}

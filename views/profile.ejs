@@ -1,5 +1,6 @@
 <div class="row">
-    <div class="col-sm-12">
+    <div class="col-md-6">
+        <h3>Personal information</h3>
         <%
         if(message && message.length > 0) {
             for(var i = 0; i < message.length; i++){
@@ -9,57 +10,80 @@
             }
         }
         %>
-        <form action="/profile" method="post">
+        <form action="/profile" method="post" class="form-horizontal">
             <div class="form-group">
-                <label for="firstName">First name</label>
-                <input type="text" class="form-control" name="firstName" id="firstName" value="<%= user.firstName %>" />
+                <label for="firstName" class="col-md-4 control-label">First name</label>
+                <div class="col-md-8">
+                    <input type="text" class="form-control" name="firstName" id="firstName" value="<%= (user.firstName) ? user.firstName : '' %>" />
+                </div>
             </div>
             <div class="form-group">
-                <label for="lastName">Last name</label>
-                <input type="text" class="form-control" name="lastName" id="lastName" value="<%= user.lastName %>" />
+                <label for="lastName" class="col-md-4 control-label">Last name</label>
+                <div class="col-md-8">
+                    <input type="text" class="form-control" name="lastName" id="lastName" value="<%= (user.lastName) ? user.lastName : '' %>" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="city" class="col-md-4 control-label">City</label>
+                <div class="col-md-8">
+                    <input type="text" class="form-control" name="city" id="city" value="<%= (user.city) ? user.city : '' %>" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="country" class="col-md-4 control-label">Country</label>
+                <div class="col-md-8">
+                    <input type="text" class="form-control" name="country" id="country" value="<%= (user.country) ? user.country : '' %>" />
+                </div>
             </div>
 
-            <button type="submit" class="btn btn-warning btn-lg">Save</button>
+            <button type="submit" class="btn btn-primary pull-right">Save information</button>
         </form>
     </div>
-</div>
+    <div class="col-md-6">
+        <div class="row">
+            <h3>Login options</h3>
+            <div class="col-md-6">
+                <div class="well">
+                    <h3>E-mail</h3>
+                    <% if(user.local.email) { %>
+                    <p>
+                        <strong>E-mail</strong>: <%= user.local.email %><br>
+                    </p>
+                    <p>
+                        <a href="/unlink/local" class="btn btn-warning">Unlink</a>
+                    </p>
+                    <% } else {%>
+                    <p>
+                        Sign in using your e-mail address and personal password.
+                    </p>
+                    <p>
+                        <a href="/connect/local" class="btn btn-primary">Connect</a>
+                    </p>
+                    <% } %>
 
-<div class="row">
-    <div class="col-sm-6">
-        <div class="well">
-            <h3 class="text-danger">Local</h3>
-            <% if(user.local.email) { %>
-            <p>
-                <strong>email</strong>: <%= user.local.email %><br>
-                <strong>password</strong>: <%= user.local.password %><br>
-            </p>
-            <p>
-                <a href="/unlink/local" class="btn btn-default">Unlink</a>
-            <% } else {%>
-                <a href="/connect/local" class="btn btn-default">Connect</a>
-            <% } %>
-            </p>
-
-        </div>
-    </div>
-
-    <div class="col-sm-6">
-        <div class="well">
-            <h3 class="text-danger"><span class="fa fa-google-plus"></span> Google</h3>
-            <% if(user.google.token) { %>
-            <p>
-                <strong>id</strong>: <%= user.google.id %><br>
-                <strong>token</strong>: <%= user.google.token %><br>
-                <strong>email</strong>: <%= user.google.email %><br>
-                <strong>name</strong>: <%= user.google.name %>
-            </p>
-            <p>
-                <a href="/unlink/google" class="btn btn-default">Unlink</a>
-            <% } else {%>
-                <a href="/connect/google" class="btn btn-default">Connect</a>
-            <% } %>
-            </p>
-
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="well">
+                    <h3>Google</h3>
+                    <% if(user.google.token) { %>
+                    <p>
+                        <strong>E-mail</strong>: <%= user.google.email %><br>
+                        <strong>Name</strong>: <%= user.google.name %>
+                    </p>
+                    <p>
+                        <a href="/unlink/google" class="btn btn-warning">Unlink</a>
+                    </p>
+                    <% } else {%>
+                    <p>
+                        Sign in using your google account.
+                    </p>
+                    <p>
+                        <a href="/connect/google" class="btn btn-primary">Connect</a>
+                    </p>
+                    <% } %>
+                </div>
+            </div>
         </div>
     </div>
 </div>

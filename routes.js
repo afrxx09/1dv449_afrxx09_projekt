@@ -1,14 +1,19 @@
 var express = require('express');
 var beerC = require('./controllers/beer');
 var userC = require('./controllers/user');
+var brewerydbC = require('./controllers/brewerydb');
 
 module.exports = function(app, passport){
 	app.get('*', function(req, res, next) {
 		res.locals.user = req.user || null;
 		next();
 	});
+	app.post('*', function(req, res, next) {
+		res.locals.user = req.user || null;
+		next();
+	});
 
-	app.get('/unlink/local', function(req, res){
+	app.get('/unlink/local', isLoggedIn, function(req, res){
 		var user = req.user;
 		user.local.email = undefined;
 		user.local.password = undefined;
@@ -16,17 +21,17 @@ module.exports = function(app, passport){
             res.redirect('/profile');
 		});
 	});
-	app.get('/unlink/google', function(req, res){
+	app.get('/unlink/google', isLoggedIn, function(req, res){
 		var user = req.user;
 		user.google.token = undefined;
 		user.save(function(err){
             res.redirect('/profile');
 		});
 	});
-	app.get('/connect/local', function(req, res){
+	app.get('/connect/local', isLoggedIn, function(req, res){
 		res.render('connect_local', { message: req.flash('loginMessage')});
 	});
-	app.post('/connect/local', passport.authenticate('local-signup', {
+	app.post('/connect/local', isLoggedIn, passport.authenticate('local-signup', {
 		successRedirect: '/profile',
 		failureRedirect: '/connect/local',
 		falureFlash: true
@@ -39,7 +44,7 @@ module.exports = function(app, passport){
 	}));
 	app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
 	app.get('/auth/google/callback', passport.authenticate('google', {
-		successRedirect : '/profile',
+		successRedirect : '/',
 		failureRedirect : '/login',
 		falureFlash: true
 	}));
@@ -64,7 +69,11 @@ module.exports = function(app, passport){
 			falureFlash: true
 		}));
 	router.route('/logout').get(function(req, res) { req.logout(); res.redirect('/'); });
-
+	router.route('/beersearch')
+		.get(isLoggedIn, beerC.searchResults)
+		.post(isLoggedIn, beerC.search);
+	router.route('/brewerydbsearch/:searchString')
+		.get(isLoggedIn, brewerydbC.search);
 	var apiRouter = express.Router();
 	apiRouter.route('/beers')
 		.post(isLoggedIn, beerC.postBeers)

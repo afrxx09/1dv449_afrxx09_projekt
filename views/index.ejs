@@ -2,9 +2,13 @@
 	<div class="col-md-5 col-md-offset-0">
 		<% if(user){ %>
 			<h3>Beer search</h3>
-			<form method="post" action="beersearch">
-				<input id="beerSearch" class="form-control" type="text" name="beerSearch" placeholder="Beer search" />
-				<button class="btn btn-lg btn-primary btn-block" type="submit">Search</button>
+			<form method="post" action="/beersearch">
+				<div class="col-md-8">
+					<input id="beerSearch" class="form-control" type="text" name="beerSearch" placeholder="Beer search" autofocus />
+				</div>
+				<div class="col-md-4">
+					<button class="btn btn-primary btn-block" type="submit">Search</button>
+				</div>
 			</form>
 		<% } else { %>
 		<h3>Information</h3>
@@ -17,22 +21,7 @@
             <strong>Last name</strong>: <%= user.lastName %><br />
         </p>
 		<% } else { %>
-		<form method="post" action="/login">
-			<h3>Sign in</h3>
-			<label for="email" class="sr-only">Email</label>
-			<input type="text" name="email" id="email" class="form-control" placeholder="Email" required autofocus>
-			<label for="password" class="sr-only">Password</label>
-			<input type="password" name="password" id="password" class="form-control" placeholder="Password" required>
-			<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-		</form>
-		<p class="text-center">
-			or sign in with<br />
-			<a href="/auth/google" class="btn btn-danger"><span class="fa fa-google-plus"></span>Google</a>
-		</p>
-		<p class="text-center">
-			or<br />
-			<a href="/signup">Sign up</a>
-		</p>
+			<% include partials/login_form %>
 		<% } %>
 	</div>
 </div>

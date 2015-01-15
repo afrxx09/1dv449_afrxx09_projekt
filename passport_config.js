@@ -22,12 +22,10 @@ module.exports = function(passport) {
         process.nextTick(function(){
             User.findOne({'local.email':  email}, function(err, existingUser){
                 if(err) return done(err);
-                if(req.body.password_confirm !== password) return done(null, false, req.flash('loginMessage', 'Password does not match.'))
+                if(req.body.password_confirm !== password) return done(null, false, req.flash('loginMessage', 'Password does not match.'));
                 if(existingUser) return done(null, false, req.flash('loginMessage', 'User already exists.'));
                 if(req.user){
                     user = req.user;
-                    user.firstName = req.body.firstName;
-                    user.lastName = req.body.lastName;
                     user.local.email = email;
                     user.local.password = user.generateHash(password);
                     user.save(function(err){
