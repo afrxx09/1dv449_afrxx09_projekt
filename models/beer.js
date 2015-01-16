@@ -1,13 +1,23 @@
 var mongoose = require('mongoose');
 
 var BeerSchema = new mongoose.Schema({
-	brewerydb_id : String,
-	name: String,
+	brewerydb_id : {
+		type: String,
+		index: true
+	},
+	name : {
+		type: String,
+		index: true
+	},
 	description: String,
 	style: String,
 	ibu: String,
 	abv: String,
-	quantity: Number
+	labels: {
+		large : String,
+		medium : String,
+		icon : String
+	}
 });
 
 module.exports = mongoose.model('Beer', BeerSchema);

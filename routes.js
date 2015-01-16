@@ -1,7 +1,7 @@
 var express = require('express');
 var beerC = require('./controllers/beer');
 var userC = require('./controllers/user');
-var brewerydbC = require('./controllers/brewerydb');
+var brewerydbC = require('./webservices/brewerydb');
 
 module.exports = function(app, passport){
 	app.get('*', function(req, res, next) {
@@ -69,9 +69,10 @@ module.exports = function(app, passport){
 			falureFlash: true
 		}));
 	router.route('/logout').get(function(req, res) { req.logout(); res.redirect('/'); });
+
 	router.route('/search').get(isLoggedIn, beerC.search);
-	router.route('/brewerydb').get(isLoggedIn, brewerydbC.search);
 	
+	/*
 	var apiRouter = express.Router();
 	apiRouter.route('/beers')
 		.post(isLoggedIn, beerC.postBeers)
@@ -80,9 +81,9 @@ module.exports = function(app, passport){
 		.get(isLoggedIn, beerC.getBeer)
 		.put(isLoggedIn, beerC.putBeer)
 		.delete(isLoggedIn, beerC.deleteBeer);
-
+	*/
 	app.use('/', router);
-	app.use('/api', apiRouter);
+	//app.use('/api', apiRouter);
 	app.use(express.static(__dirname + '/public'));
 };
 

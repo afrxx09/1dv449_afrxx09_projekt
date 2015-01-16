@@ -1,5 +1,22 @@
 var Beer = require('../models/beer');
+var brewerydb = require('../webservices/brewerydb');
 
+exports.search = function(req, res){
+	Beer.find({ name : {$regex: req.query.beer_search, $options: 'i' } }, function(err, localData){
+		localData = (err || localData === null || localData.length == 0) ? null : localData;
+		console.log(localData);
+		var externalData = null;
+		if(!localData){
+			externalData = brewerydb.search(req.query.beer_search);
+		}
+        res.render('search', {
+        	beers : localData,
+        	brewerydb : externalData,
+        	beer_search : req.query.beer_search
+        });
+	});
+}
+/*
 exports.postBeers = function(req, res){
 	var beer = new Beer();
 	beer.name = req.body.name;
@@ -38,11 +55,4 @@ exports.deleteBeer = function(req, res){
 		res.json({message: 'Beer removed!'});
 	})
 };
-
-exports.search = function(req, res){
-	Beer.find({ name : {$regex: req.query.beer_search, $options: 'i' } }, function(err, r){
-		if(err) console.log(err);
-		r = (r.length > 0) ? r : null;
-        res.render('search', {beers : r, beer_search : req.query.beer_search});
-	});
-}
+*/
