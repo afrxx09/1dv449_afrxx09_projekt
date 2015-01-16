@@ -1,12 +1,12 @@
 var BreweryDb = require('brewerydb-node');
-var breweryDbCFG = require('../brewery_db_cfg.js');
+var breweryDbCFG = require('../config/brewery_db_cfg.js');
 var api_key = process.env.BREWERYDB_API_KEY || breweryDbCFG.api_key;
 var brewdb = new BreweryDb(api_key);
 var Beer = require('../models/beer');
 
 exports.search = function(req, res){
-	var b = [];
-	brewdb.search.beers({ q: req.params.searchString }, function(err, data){
+	brewdb.search.beers({ q: req.query.beer_search }, function(err, data){
+		var b = [];
 		if(err) console.log(err);
 		if(!data){
 			console.log('no result');
@@ -16,7 +16,7 @@ exports.search = function(req, res){
 				var newBeer = new Beer();
 				newBeer.brewerydb_id = data[i].id;
 				newBeer.name = data[i].name;
-				newBeer.style = data[i].style.name;
+				newBeer.style = data[i].style.category.name;
 				newBeer.description = data[i].description;
 				newBeer.ibu = data[i].ibu;
 				newBeer.abv = data[i].id;
@@ -26,7 +26,6 @@ exports.search = function(req, res){
 				});
 			}
 		}
-		res.render('beersearch', {beers : b, 'searchString' : req.body.beerSearch});
-		
+		res.redirect('search?beer_search=' + req.query.beer_search);
 	});
 }

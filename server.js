@@ -16,7 +16,7 @@ mongoose.connect(mongodbString, function (err, res) {
 	else console.log ('Succeeded connected to: ' + mongodbString);
 });
 
-require('./passport_config')(passport);
+require('./config/passport_config')(passport);
 
 app.use(expressLayouts);
 app.use(express.static(__dirname + '/public'));

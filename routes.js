@@ -50,7 +50,7 @@ module.exports = function(app, passport){
 	}));
 
 	var router = express.Router();
-	router.route('/').get(function(req, res){ res.render('index'); });
+	router.route('/').get(function(req, res){ res.render('index', { beer_search : null}); });
 	router.route('/profile')
 		.get(isLoggedIn, userC.getProfile)
 		.post(isLoggedIn, userC.saveProfile);
@@ -69,11 +69,9 @@ module.exports = function(app, passport){
 			falureFlash: true
 		}));
 	router.route('/logout').get(function(req, res) { req.logout(); res.redirect('/'); });
-	router.route('/beersearch')
-		.get(isLoggedIn, beerC.searchResults)
-		.post(isLoggedIn, beerC.search);
-	router.route('/brewerydbsearch/:searchString')
-		.get(isLoggedIn, brewerydbC.search);
+	router.route('/search').get(isLoggedIn, beerC.search);
+	router.route('/brewerydb').get(isLoggedIn, brewerydbC.search);
+	
 	var apiRouter = express.Router();
 	apiRouter.route('/beers')
 		.post(isLoggedIn, beerC.postBeers)

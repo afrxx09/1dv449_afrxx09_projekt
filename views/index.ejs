@@ -1,15 +1,7 @@
 <div class="row">
 	<div class="col-md-5 col-md-offset-0">
 		<% if(user){ %>
-			<h3>Beer search</h3>
-			<form method="post" action="/beersearch">
-				<div class="col-md-8">
-					<input id="beerSearch" class="form-control" type="text" name="beerSearch" placeholder="Beer search" autofocus />
-				</div>
-				<div class="col-md-4">
-					<button class="btn btn-primary btn-block" type="submit">Search</button>
-				</div>
-			</form>
+			<% include partials/beer_search %>
 		<% } else { %>
 		<h3>Information</h3>
 		<% } %>

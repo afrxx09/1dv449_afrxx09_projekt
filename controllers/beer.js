@@ -40,13 +40,9 @@ exports.deleteBeer = function(req, res){
 };
 
 exports.search = function(req, res){
-	Beer.find({ name : {$regex: req.body.beerSearch, $options: 'i' } }, function(err, r){
+	Beer.find({ name : {$regex: req.query.beer_search, $options: 'i' } }, function(err, r){
 		if(err) console.log(err);
 		r = (r.length > 0) ? r : null;
-        res.render('beersearch', {beers : r, 'searchString' : req.body.beerSearch});
+        res.render('search', {beers : r, beer_search : req.query.beer_search});
 	});
-}
-
-exports.searchResults = function(req, res){
-	res.render('beersearch', {beers: null, 'searchString' : null});
 }

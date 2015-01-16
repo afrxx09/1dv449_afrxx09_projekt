@@ -1,0 +1,9 @@
+<h3>Beer search</h3>
+<form method="get" action="/search">
+	<div class="col-md-8">
+		<input id="beer_search" class="form-control" type="text" name="beer_search" placeholder="Beer search" value="<%= (beer_search) ? beer_search : '' %>" autofocus />
+	</div>
+	<div class="col-md-4">
+		<button class="btn btn-primary btn-block" type="submit">Search</button>
+	</div>
+</form>
