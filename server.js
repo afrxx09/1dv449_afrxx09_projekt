@@ -6,6 +6,7 @@ var passport = require('passport');
 var session = require('express-session');
 var expressLayouts = require('express-ejs-layouts');
 var flash = require('connect-flash');
+var compress = require('compression');
 
 var mongodbString = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/beer';
 var port = process.env.PORT || 5000;
@@ -21,7 +22,7 @@ mongoose.connect(mongodbString, function (err, res) {
 });
 
 require('./config/passport_config')(passport);
-
+app.use(compress());
 app.use(expressLayouts);
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({'extended':'true'}));
