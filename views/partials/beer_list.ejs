@@ -1,0 +1,34 @@
+<% if(stash){ %>
+<div id="user-beer-stash" class="list">
+	<% for(var i = 0; i < stash.length; i++){
+		var b = stash[i].beer;
+	%>
+	<div class="row beer-row">
+		<div class="col-md-1">
+			<img src="<%= (b.labels.small) ? b.labels.small : '/images/no_image_beer.png' %>" />
+		</div>
+		<div class="col-md-5">
+			<%= b.name %> <%= b.abv %>% <br />
+			<%= b.brewery.name %>
+		</div>
+		
+		<div class="col-md-6">
+			<div class="row" data-user-beer="<%= stash[i]._id %>">
+				<div class="col-md-3">
+					<input type="text" class="form-control" value="<%= stash[i].quantity %>" disabled="disabled"/>
+				</div>
+				<div class="col-md-3">
+					<a href="#" class="btn btn-primary btn-md btn-block inc" role="button"> + </a>
+				</div>
+				<div class="col-md-3">
+					<a href="#" class="btn btn-primary btn-md btn-block dec" role="button"> - </a>
+				</div>
+				<div class="col-md-3">
+					<a href="#" class="btn btn-danger btn-md btn-block delconf" role="button"> Del </a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<% } %>
+</div>
+<% } %>

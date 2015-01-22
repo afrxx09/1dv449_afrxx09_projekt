@@ -11,6 +11,10 @@ var mongodbString = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/beer'
 var port = process.env.PORT || 5000;
 var app = express();
 
+process.on('uncaughtException', function(err) {
+    console.log(err);
+});
+
 mongoose.connect(mongodbString, function (err, res) {
 	if(err) console.log ('ERROR connecting to: ' + mongodbString + '. ' + err);
 	else console.log ('Succeeded connected to: ' + mongodbString);

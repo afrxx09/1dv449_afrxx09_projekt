@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
-var bcrypt   = require('bcrypt-nodejs');
+var Schema = mongoose.Schema;
+var bcrypt = require('bcrypt-nodejs');
 
 var userSchema = mongoose.Schema({
     firstName : {
@@ -10,12 +11,10 @@ var userSchema = mongoose.Schema({
         type: String,
         required: [true, 'Last name required']
     },
-    city : {
-        type: String
-    },
-    Country : {
-        type: String
-    },
+    city : String,
+    country : String,
+    userBeers : [{ type: Schema.Types.ObjectId, ref: 'UserBeer' }],
+    friends : [{ type: Schema.Types.ObjectId, ref: 'User' }],
     local : {
         email : {
             type: String,

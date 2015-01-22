@@ -1,0 +1,46 @@
+<div class="row beer-details">
+    <div class="col-md-12">
+        <form method="get" action="/friends" class="form-horizontal">
+            <div class="form-group">
+                <div class="col-md-2 text-right">
+                    <label for="friend_search" class="control-label"><h3 style="margin:0;">Friend search</h3></label>
+                </div>
+                <div class="col-md-6">
+                    <input id="friend_search" class="form-control" type="text" name="friend_search" placeholder="Friend search" value="<%= (friend_search) ? friend_search : '' %>" autofocus />
+                </div>
+                <div class="col-md-3">
+                    <button class="btn btn-primary btn-block" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <div class="col-md-12 list">
+    
+        <% if(users && users.length > 0){ for(var i = 0; i < users.length; i++){ %>
+        <div class="row">
+            <div class="col-md-4">
+                <strong>Name:</strong> <%= users[i].firstName %> <%= users[i].lastName %>
+            </div>
+            <div class="col-md-4">
+                <strong>Location:</strong> <%= (users[i].city) ? users[i].city : '' %> <%= (users[i].country) ? users[i].country : '' %>
+            </div>
+            <div class="col-md-2">
+                <strong>In stash:</strong> <%= users[i].userBeers.length %>
+            </div>
+            <div class="col-md-2">
+                <form method="get" action="/addfriend/<%= users[i]._id %>">
+                    <button class="btn btn-primary btn-sm" type="submit">Add Friend</button>
+                </form>
+            </div>
+        </div>
+        <% }} %>
+        
+        <% for(var i = 0; i < user.friends.length; i++){ %>
+        <div class="row">
+            <div class="col-md-4"><%= user.friends[i].firstName %> <%= user.friends[i].lastName %></div>
+            <div class="col-md-4"><%= user.friends[i].beers.length %></div>
+        </div>
+        <% } %>
+    </div>
+</div>

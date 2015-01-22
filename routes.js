@@ -2,6 +2,7 @@ var express = require('express');
 var beerC = require('./controllers/beer');
 var userC = require('./controllers/user');
 var brewerydbC = require('./webservices/brewerydb');
+var userBeer = require('./models/user_beer');
 
 module.exports = function(app, passport){
 	app.get('*', function(req, res, next) {
@@ -50,7 +51,19 @@ module.exports = function(app, passport){
 	}));
 
 	var router = express.Router();
-	router.route('/').get(function(req, res){ res.render('index', { beer_search : null}); });
+	router.route('/').get(function(req, res){
+		if(req.user){
+			userBeer.find({user : req.user._id}).populate('beer').exec(function(err, stash){
+				if(err) res.render('index', { beer_search : null, 'stash' : [] });
+				else{
+					res.render('index', { beer_search : null, 'stash' : stash });
+				}
+			});
+		}
+		else{
+			res.render('index', { beer_search : null, 'stash' : [] });
+		}
+	});
 	router.route('/profile')
 		.get(isLoggedIn, userC.getProfile)
 		.post(isLoggedIn, userC.saveProfile);
@@ -71,6 +84,26 @@ module.exports = function(app, passport){
 	router.route('/logout').get(function(req, res) { req.logout(); res.redirect('/'); });
 
 	router.route('/search').get(isLoggedIn, beerC.search);
+	router.route('/addtostash/:beer_id').post(isLoggedIn, userC.addBeerToStash);
+	router.route('/updateuserstash').post(isLoggedIn, function(req, res){
+		userBeer.findOne({_id: req.body.id}, function(err, ub){
+			if(err) res.status(500).send();
+			ub.quantity = (req.body.a == 'inc') ? ub.quantity + 1 : ub.quantity - 1;
+			ub.save(function(err){
+				if(err) res.status(500).send();
+				res.json({newValue : ub.quantity});
+			});
+		});
+	});
+	router.route('/deletefromuserstash').post(isLoggedIn, function(req, res){
+		userBeer.remove({_id : req.body.id}, function(err){
+			if(err) res.status(500).send();
+			res.json({a : 'b'});
+		});
+	});
+	//router.route('/friends').get(isLoggedIn, userC.friends);
+	
+	router.route('/beer/:beer_id').get(isLoggedIn, beerC.show);
 	
 	/*
 	var apiRouter = express.Router();

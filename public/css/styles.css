@@ -1,5 +1,14 @@
 body {
 	padding-top:50px;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 1.5em;
+}
+h1,h2,h3,h4,h5,h6{
+	font-family: 'Khand', sans-serif;
+}
+
+.donotshow{
+	display:none;
 }
 
 #main-content{
@@ -9,3 +18,41 @@ body {
 .well h1, .well h2, .well h3, .well h4, .well h5, .well h6{
 	margin-top:0;
 } 
+
+/*Beer details page*/
+.row.beer-details .row{
+	padding:.25em 0;
+}
+
+.row.beer-details img{
+	margin:0;
+	padding:10px;
+	border: 1px solid #444;
+	background:#fff;
+	max-height:256px;
+	max-width:256px;
+}
+
+
+/*beer search page*/
+.lsit a{
+	display:block;
+	float:left;
+	width:100%;
+	color:#333;
+	font-size:1.15em;
+}
+.list .row img{
+	max-width:48px;
+	max-height:48px;
+}
+.list>.row{
+	padding:5px 0;
+	background:#eee;
+}
+.list>.row:nth-child(even){
+	background:#f6f6f6;
+}
+.list>.row:hover{
+	background:#e6e6e6;
+}

@@ -1,0 +1,52 @@
+<div class="row beer-details">
+	<h3><%= beer.name %></h3>
+    <div class="col-md-6">
+        <div class="row">
+    		<div class="col-md-3"><strong>Style</strong></div>
+    		<div class="col-md-9"><%= beer.style %></div>
+    	</div>
+    	<div class="row">
+    		<div class="col-md-3"><strong>ABV</strong></div>
+    		<div class="col-md-9"><%= beer.abv %></div>
+    	</div>
+    	<div class="row">
+    		<div class="col-md-3"><strong>IBU</strong></div>
+    		<div class="col-md-9"><%= beer.ibu %></div>
+    	</div>
+    	<div class="row">
+    		<div class="col-md-3"><strong>Brewery</strong></div>
+    		<div class="col-md-9"><%= beer.brewery.name %></div>
+    	</div>
+    	<div class="row">
+    		<div class="col-md-3"><strong>Website</strong></div>
+    		<div class="col-md-9"><a href="<%= beer.brewery.website %>" target="_blank"><%= beer.brewery.website %></a></div>
+    	</div>
+    	<div class="row">
+    		<div class="col-md-3"><strong>Description</strong></div>
+    		<div class="col-md-9"><%= beer.description %></div>
+    	</div>
+        
+        <h3>Add to your stash</h3>
+        <p>You can add this beeer to your own personal stash! Just specify your quantity and klick the button.</p>
+        <form action="/addtostash/<%= beer._id %>" method="post" class="form-horizontal">
+            <div class="form-group">
+                <label for="quantity" class="col-md-2 control-label">Quantity</label>
+                <div class="col-md-2">
+                    <input type="text" id="quantity" class="form-control" name="quantity" value="1" autofocus />
+                </div>
+                <div class="col-md-4">
+                    <button class="btn btn-primary btn-block" type="submit">Add to stash</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-6">
+        <% if(beer.labels.medium){ %>
+        	<img src="<%= beer.labels.medium %>" />
+        <% } else { %>
+             <% for(var i=0; i < flickrPhotos.length; i++){ %>
+                <img src="<%= flickrPhotos[i] %>" />
+            <% } %>
+        <% } %>
+    </div>
+</div>

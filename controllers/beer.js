@@ -1,58 +1,45 @@
 var Beer = require('../models/beer');
 var brewerydb = require('../webservices/brewerydb');
+var flickr = require('../webservices/flickr');
 
 exports.search = function(req, res){
-	Beer.find({ name : {$regex: req.query.beer_search, $options: 'i' } }, function(err, localData){
-		localData = (err || localData === null || localData.length == 0) ? null : localData;
-		console.log(localData);
-		var externalData = null;
-		if(!localData){
-			externalData = brewerydb.search(req.query.beer_search);
+	var searchString = req.query.beer_search;
+	var extenalSearch = (req.query.extend == 'true') ? true : false;
+	if(!searchString) res.render('search', { beers : [], beer_search : '' });
+	
+	Beer.find({ name : {$regex: searchString, $options: 'i' } }, function(err, beers){
+		if(err) res.render('search', { beers : [], beer_search : searchString });
+		else if(!extenalSearch){
+			res.render('search', { beers : beers, beer_search : searchString });
 		}
-        res.render('search', {
-        	beers : localData,
-        	brewerydb : externalData,
-        	beer_search : req.query.beer_search
-        });
-	});
-}
-/*
-exports.postBeers = function(req, res){
-	var beer = new Beer();
-	beer.name = req.body.name;
-	beer.type = req.body.type;
-	beer.quantity = req.body.quantity;
-	beer.userId = req.user._id;
-	beer.save(function(err){
-		if(err) res.send(err);
-		res.json({message: 'Beer saved!', data: beer});
+		else{
+			brewerydb.search(searchString, function(err, brewery_db_result){
+				if(err) console.log(err);
+				res.render('search', { beers : brewery_db_result, beer_search : searchString });
+			});
+		}
 	});
 }
 
-exports.getBeers = function(req, res){
-	Beer.find({userId: req.user._id}, function(err, beers){
-		if(err) res.send(err);
-		res.send(beers);
+exports.show = function(req, res){
+	Beer.findOne({_id: req.params.beer_id}, function(err, beer){
+		if(err) res.redirect('/search');
+		if(err) res.render('beer', { 'beer' : beer, flickrPhotos : [] });
+		else{
+			var flickrPhotos = [];
+			if(!beer.labels.medium){
+				flickr.search(beer.brewery.name, function(err, result){
+					for(var i = 0; i < result.photos.photo.length; i++){
+						var p = result.photos.photo[i];
+						var url = 'https://farm' + p.farm + '.staticflickr.com/' + p.server + '/' + p.id + '_' + p.secret + '.jpg';
+						flickrPhotos.push(url);
+					}
+					res.render('beer', { 'beer' : beer, flickrPhotos : flickrPhotos });
+				});
+			}
+			else{
+				res.render('beer', { 'beer' : beer, flickrPhotos : flickrPhotos });
+			}
+		}
 	});
-};
-
-exports.getBeer = function(req, res){
-	Beer.find({userId: req.user._id, _id: req.params.beer_id}, function(err, beer){
-		if(err) res.send(err);
-		res.json(beer);
-	});
-};
-
-exports.putBeer = function(req, res){
-	Beer.update({userId: req.user._id, _id: req.params.beer_id}, {quantity: req.body.quantity}, function(err, num, raw){
-		res.json({message: num + ' updated.'});
-	});
-};
-
-exports.deleteBeer = function(req, res){
-	Beer.remove({userId: req.user._id, _id: req.params.beer_id}, function(err){
-		if(err)	res.send(err);
-		res.json({message: 'Beer removed!'});
-	})
-};
-*/
+}
