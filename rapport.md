@@ -4,6 +4,8 @@ Andreas Fridlund - afrxx09
 ##Inledning
 I brist på fantasi blev det en applikation där man kan hantera ett öl-lager. Efter att ha letat och läst om diverse API:er i över två dagar, kunde jag fortfarande inte komma på någon bra idé att göra en applikation om. Det var svårt att hitta 2 bra, tillförlitliga och intressanta API:er, samt att det var svårt att komma på en applikation som kunde använda datan på ett relevant sätt. Då jag inte kom på någon bra idé och började känna stressen så fick jag nöja mig med en dålig applikations-idé och bara börja. Värt att nämna också är att jag inte ville använda google maps som en av de två datakällorna, då det kändes lite tråkigt och som en för enkel utväg. Jag känner inte till några andra applikationer av detta slaget.
 
+![Schema](https://github.com/afrxx09/1dv449_afrxx09_projekt/blob/master/schema.png)
+
 ##Serversidan
 Applikationen är skriven i node js, med en MongoDB NoSQL-databas tillsammans med ett flertal node js-moduler. De mest relevanta är Express som förenklar arbetet med att sätta upp serven och routes. Mongoose för databas och modell-scheman. Passport för inloggning, konton, och oauth. De två API:er jag använder är brewerydb.com för att hämta information om öl och bryggerier, samt Flickr för att hämta bilder relaterade till dessa.
 
