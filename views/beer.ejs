@@ -11,7 +11,7 @@
     	</div>
     	<div class="row">
     		<div class="col-md-3"><strong>IBU</strong></div>
-    		<div class="col-md-9"><%= beer.ibu %></div>
+    		<div class="col-md-9"><%= (beer.ibu) ? beer.ibu : '' %></div>
     	</div>
     	<div class="row">
     		<div class="col-md-3"><strong>Brewery</strong></div>
@@ -23,7 +23,7 @@
     	</div>
     	<div class="row">
     		<div class="col-md-3"><strong>Description</strong></div>
-    		<div class="col-md-9"><%= beer.description %></div>
+    		<div class="col-md-9"><%= (beer.description) ? beer.description : 'No description available.' %></div>
     	</div>
         
         <h3>Add to your stash</h3>

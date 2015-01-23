@@ -6,7 +6,7 @@ var userBeer = require('./models/user_beer');
 
 module.exports = function(app, passport){
 	app.get('*', function(req, res, next) {
-		res.setHeader('Cache-Control', 'public, max-age=31557600');
+		//res.setHeader('Cache-Control', 'public, max-age=31557600');
 		res.locals.user = req.user || null;
 		next();
 	});

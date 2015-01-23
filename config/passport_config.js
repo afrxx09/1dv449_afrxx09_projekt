@@ -74,8 +74,8 @@ module.exports = function(passport) {
     }));
 
     passport.use(new GoogleStrategy({
-        clientID : process.env.GOOGLE_CLIENT_CB || googleCFG.clientID,
-        clientSecret : process.env.GOOGLE_CLIENT_CB || googleCFG.clientSecret,
+        clientID : process.env.GOOGLE_CLIENT_ID || googleCFG.clientID,
+        clientSecret : process.env.GOOGLE_CLIENT_SECRET || googleCFG.clientSecret,
         callbackURL : process.env.GOOGLE_CLIENT_CB || googleCFG.callbackURL,
         passReqToCallback : true
     },
@@ -90,7 +90,7 @@ module.exports = function(passport) {
                             user.google.token = token;
                             user.google.name = profile.displayName;
                             user.google.email = profile.emails[0].value;
-                            user.save(function(err) {
+                            user.save(function(err){
                                 if(err){
                                     for(var error in err.errors){
                                         req.flash('loginMessage', err.errors[error].message);

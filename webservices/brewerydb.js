@@ -10,7 +10,9 @@ var Webservice = {
 		brewdb.search.beers({ q: beer_search, type: 'beer', withBreweries : 'Y' }, function(err, data){
 			if(err || !data ) return callback(err);
 			
-			var beers = [], newBeer = null;
+			var beers = []
+			var newBeer = null;
+			var added = 0;
 			for(var i = 0; i < data.length; i++){
 				newBeer = new Beer();
 				newBeer.brewerydb_id = data[i].id;
@@ -27,12 +29,14 @@ var Webservice = {
 					newBeer.brewery.name = data[i].breweries[0].name;
 					newBeer.brewery.website = data[i].breweries[0].website;
 				}
+				beers.push(newBeer);
 				newBeer.save(function(err){
 					if(err) console.log(err);
-					beers.push(newBeer);
+					if (++added == data.length) {
+						callback(null, beers);
+					}
 				});
 			}
-			callback(null, beers);
 		});
 	}
 }
