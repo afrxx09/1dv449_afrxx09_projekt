@@ -7,3 +7,5 @@
 [Länk till projekt-rapport](https://github.com/afrxx09/1dv449_afrxx09_projekt/blob/master/rapport.md)
 
 [Länk till video](https://www.youtube.com/watch?v=3c5hAEL80IA)
+
+[Länk till live-version](https://secret-mountain-4636.herokuapp.com/)
