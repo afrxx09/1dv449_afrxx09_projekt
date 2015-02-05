@@ -21,14 +21,26 @@ exports.saveProfile = function(req, res){
 		user.lastName = req.body.lastName;
 		user.city = req.body.city;
 		user.country = req.body.country;
-		user.save(function(err){
-			if(err){
-                for(var error in err.errors){
-                    req.flash('loginMessage', err.errors[error].message);
-                }
-            }
+		try{
+			user.save(function(err){
+				if(err){
+	                for(var error in err.errors){
+	                    req.flash('loginMessage', err.errors[error].message);
+	                }
+	            }
+	            else{
+		            req.flash('loginMessage', 'Saved profile');
+		        }
+		        res.redirect('/profile');
+			});
+		}
+		catch(err){
+			
+			console.log('Caught error: ' + err);
+			req.flash('loginMessage', 'Failed saving profile');
 			res.redirect('/profile');
-		});
+		}
+
 	});
 };
 
@@ -44,11 +56,14 @@ exports.addBeerToStash = function(req, res){
 			userBeer.beer = beer;
 			userBeer.quantity = req.body.quantity;
 			userBeer.save(function(err){
-				if(err) console.log(err);
+				if(err){
+					console.log(err);
+				}
 				else{
 					user.userBeers.push(userBeer);
 					user.save(function(err){
 						if(err) console.log(err);
+						req.flash('loginMessage', 'Added '  + userBeer.beer.name + ' to your stash');
 						res.redirect('/');
 					});
 				}

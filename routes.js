@@ -41,7 +41,7 @@ module.exports = function(app, passport){
 	app.get('/connect/google', passport.authorize('google', { scope : ['profile', 'email'] }));
 	app.get('/connect/google/callback', passport.authorize('google', {
 		successRedirect : '/profile',
-		failureRedirect : '/login',
+		failureRedirect : '/',
 		falureFlash: true
 	}));
 	app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
@@ -55,14 +55,14 @@ module.exports = function(app, passport){
 	router.route('/').get(function(req, res){
 		if(req.user){
 			userBeer.find({user : req.user._id}).populate('beer').exec(function(err, stash){
-				if(err) res.render('index', { beer_search : null, 'stash' : [] });
+				if(err) res.render('index', { beer_search : null, 'stash' : [], message : req.flash('loginMessage') });
 				else{
-					res.render('index', { beer_search : null, 'stash' : stash });
+					res.render('index', { beer_search : null, 'stash' : stash, message : req.flash('loginMessage') });
 				}
 			});
 		}
 		else{
-			res.render('index', { beer_search : null, 'stash' : [] });
+			res.render('index', { beer_search : null, 'stash' : [], message : req.flash('loginMessage') });
 		}
 	});
 	router.route('/profile')
@@ -76,7 +76,9 @@ module.exports = function(app, passport){
 			falureFlash: true
 		}));
 	router.route('/login')
-		.get(function(req, res){ res.render('login', {message : req.flash('loginMessage')}); })
+		.get(function(req, res){
+			res.render('login', {message : req.flash('loginMessage')});
+		})
 		.post(passport.authenticate('local-login', {
 			successRedirect : '/',
 			failureRedirect : '/login',
@@ -102,22 +104,10 @@ module.exports = function(app, passport){
 			res.json({a : 'b'});
 		});
 	});
-	//router.route('/friends').get(isLoggedIn, userC.friends);
 	
 	router.route('/beer/:beer_id').get(isLoggedIn, beerC.show);
 	
-	/*
-	var apiRouter = express.Router();
-	apiRouter.route('/beers')
-		.post(isLoggedIn, beerC.postBeers)
-		.get(isLoggedIn, beerC.getBeers);
-	apiRouter.route('/beer/:beer_id')
-		.get(isLoggedIn, beerC.getBeer)
-		.put(isLoggedIn, beerC.putBeer)
-		.delete(isLoggedIn, beerC.deleteBeer);
-	*/
 	app.use('/', router);
-	//app.use('/api', apiRouter);
 	app.use(express.static(__dirname + '/public'));
 };
 

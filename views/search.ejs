@@ -7,22 +7,35 @@
 	<div class="col-md-12">
 		<% if(beer_search){ %>
 		<h3>Search results</h3>
-		<p>Didn't find what you were looking for? <a href="/search?beer_search=<%= beer_search %>&amp;extend=true">Extend search with brewerydb.com!</a></p>
+			<% if(external == false){ %> 
+			<p>Didn't find what you were looking for? <a href="/search?beer_search=<%= beer_search %>&amp;extend=true">Extend search with brewerydb.com!</a></p>
+			<% } else{ %>
+			<p>Result from <a href="http://www.brewerydb.com" target="_blank">Brewery DB</a></p>
+			<% } %>
 		<% } %>
 		<div class="list">
 		<%
-		if(beers && beers.length > 0){
-			for(var i = 0; i < beers.length; i++){
+		if(beers){
+			if(beers.length > 0){
+				for(var i = 0; i < beers.length; i++){
 		%>
 			<div class="row">
 				<a href="/beer/<%= beers[i]._id %>" class="col-md-12">
 					<div class="col-md-2 text-center"><img src="<%= (beers[i].labels.small) ? beers[i].labels.small : '/images/no_image_beer.png' %>" /></div>
 					<div class="col-md-4"><strong><%= beers[i].name %></strong></div>
 					<div class="col-md-4"><%= beers[i].brewery.name %></div>
-					<div class="col-md-4">ABV: <%= (beers[i].abv) ? beers[i].abv : 'unknown' %>%</div>
-					<div class="col-md-4">IBU: <%= (beers[i].ibu) ? beers[i].ibu : 'unknown' %></div>
+					<div class="col-md-4">ABV: <%= (beers[i].abv) ? beers[i].abv + '%' : '-' %></div>
+					<div class="col-md-4">IBU: <%= (beers[i].ibu) ? beers[i].ibu : '-' %></div>
 				</a>
 			</div>
+		<%
+				}
+			}
+			else{
+		%>
+				<div class="row">
+					<div class="col-md-12">No beers found</div>
+				</div>
 		<%
 			}
 		}

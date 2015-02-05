@@ -1,15 +1,6 @@
 <div class="row">
 	<div class="col-md-6 col-md-offset-3">
 		<h2>Sign up</h2>
-		<%
-		if(message && message.length > 0) {
-			for(var i = 0; i < message.length; i++){
-		%>
-			<div class="alert alert-danger"><%= message[i] %></div>
-		<%
-			}
-		}
-		%>
 		<form action="/signup" method="post" class="form-horizontal">
 		    <div class="form-group">
 		        <label for="firstName" class="col-md-4 control-label">First name <span class="required">*</span> </label>

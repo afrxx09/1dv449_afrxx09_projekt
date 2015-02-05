@@ -7,6 +7,15 @@
         <% include partials/header %>
         <div class="container">
             <div id="main-content">
+                <%
+                if((typeof(message) != 'undefined' && message != null) && message.length > 0) {
+                    for(var i = 0; i < message.length; i++){
+                %>
+                    <div class="alert alert-info"><%= message[i] %></div>
+                <%
+                    }
+                }
+                %>
                 <%- body %>
             </div>
             <hr />

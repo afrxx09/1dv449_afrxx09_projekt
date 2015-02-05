@@ -6,6 +6,32 @@
 	<% } else { %>
 		<div class="col-md-6">
 			<h3>Information</h3>
+			<p>
+				Beer stash lets you organize your own stock of beer. Keep track of what you have and how much. Easy to use, easy to access.
+			</p>
+			<hr />
+			<div class="row">
+				<div class="col-md-4 text-center">
+					<h4>Organize your stash</h4>
+				</div>
+				<div class="col-md-4 text-center">
+					<h4>Share your stash with friends</h4>
+				</div>
+				<div class="col-md-4 text-center">
+					<h4>Find rares</h4>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-4 text-center">
+					<p>Helps you keep track of your stash</p>
+				</div>
+				<div class="col-md-4 text-center">
+					<p>See what your friends have and let them know what you got.</p>
+				</div>
+				<div class="col-md-4 text-center">
+					<p>Search through thousands of beer with the help of<br /><a href="http://www.brewerydb.com" target="_blank">berwery DB</a>.</p>
+				</div>
+			</div>
 		</div>
 		<div class="col-md-4 col-md-offset-1">
 			<% include partials/login_form %>
@@ -16,15 +42,5 @@
 	<% if(user) { %>
 		<h3>Current stash</h3>
 		<% include partials/beer_list %>
-	<% } else { %>
-	<div class="col-md-4 col-sm-6">
-		<h4>Organize your stash</h4>
-	</div>
-	<div class="col-md-4 col-sm-6">
-		<h4>Share your stash with friends</h4>
-	</div>
-	<div class="col-md-4">
-		<h4>Find rares</h4>
-	</div>
 	<% } %>
 </div>

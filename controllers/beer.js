@@ -5,17 +5,17 @@ var flickr = require('../webservices/flickr');
 exports.search = function(req, res){
 	var searchString = req.query.beer_search;
 	var extenalSearch = (req.query.extend == 'true') ? true : false;
-	if(!searchString) res.render('search', { beers : [], beer_search : '' });
+	if(!searchString) res.render('search', { beers : [], beer_search : '', external : false });
 	
 	Beer.find({ name : {$regex: searchString, $options: 'i' } }, function(err, beers){
-		if(err) res.render('search', { beers : [], beer_search : searchString });
+		if(err) res.render('search', { beers : [], beer_search : searchString, external : false });
 		else if(!extenalSearch){
-			res.render('search', { beers : beers, beer_search : searchString });
+			res.render('search', { beers : beers, beer_search : searchString, external : false });
 		}
 		else{
 			brewerydb.search(searchString, function(err, brewery_db_result){
 				if(err) console.log(err);
-				res.render('search', { beers : brewery_db_result, beer_search : searchString });
+				res.render('search', { beers : brewery_db_result, beer_search : searchString, external : true });
 			});
 		}
 	});

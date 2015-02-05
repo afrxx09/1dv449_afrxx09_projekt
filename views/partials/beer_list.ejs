@@ -8,14 +8,14 @@
 			<img src="<%= (b.labels.small) ? b.labels.small : '/images/no_image_beer.png' %>" />
 		</div>
 		<div class="col-md-5">
-			<%= b.name %> <%= b.abv %>% <br />
+			<%= b.name %> <%= (b.abv) ? b.abv + '' : '' %>% <br />
 			<%= b.brewery.name %>
 		</div>
 		
 		<div class="col-md-6">
 			<div class="row" data-user-beer="<%= stash[i]._id %>">
 				<div class="col-md-3">
-					<input type="text" class="form-control" value="<%= stash[i].quantity %>" disabled="disabled"/>
+					<input type="text" class="form-control" value="<%= stash[i].quantity %>" />
 				</div>
 				<div class="col-md-3">
 					<a href="#" class="btn btn-primary btn-md btn-block inc" role="button"> + </a>

@@ -22,8 +22,14 @@ module.exports = function(passport) {
         process.nextTick(function(){
             User.findOne({'local.email':  email}, function(err, existingUser){
                 if(err) return done(err);
-                if(req.body.password_confirm !== password) return done(null, false, req.flash('loginMessage', 'Password does not match.'));
-                if(existingUser) return done(null, false, req.flash('loginMessage', 'User already exists.'));
+                if(req.body.password_confirm !== password){
+                    req.flash('loginMessage', 'Password does not match.');
+                    return done(null, false);
+                }
+                if(existingUser){
+                    req.flash('loginMessage', 'User already exists.');
+                    return done(null, false);
+                }
                 if(req.user){
                     user = req.user;
                     user.local.email = email;
@@ -64,13 +70,20 @@ module.exports = function(passport) {
         passReqToCallback : true
     },
     function(req, email, password, done) {
-        User.findOne({ 'local.email' :  email }, function(err, user) {
-            if (err) return done(err);
-            if (!user) return done(null, false, req.flash('loginMessage', 'User does not exsist.'));
-            if (!user.validPassword(password)) return done(null, false, req.flash('loginMessage', 'Wrong password.'));
-            return done(null, user);
+        process.nextTick(function() {
+            User.findOne({ 'local.email' :  email }, function(err, user) {
+                if (err) return done(err);
+                if (!user){
+                    req.flash('loginMessage', 'User does not exsist.');
+                    return done(null, false);
+                }
+                if(!user.validPassword(password)){
+                    req.flash('loginMessage', 'Wrong password.');
+                    return done(null, false);
+                }
+                return done(null, user, req.flash('loginMessage', 'Login Successfull.'));
+            });
         });
-
     }));
 
     passport.use(new GoogleStrategy({
@@ -97,10 +110,10 @@ module.exports = function(passport) {
                                     }
                                     return done(null, false);
                                 }
-                                return done(null, user);
+                                return done(null, user, req.flash('loginMessage', 'Google login Successfull.'));
                             });
                         }
-                        return done(null, user);
+                        return done(null, user, req.flash('loginMessage', 'Google login Successfull.'));
                     } 
                     else{
                         var newUser = new User();
@@ -118,7 +131,7 @@ module.exports = function(passport) {
                                 }
                                 return done(null, false);
                             }
-                            return done(null, newUser);
+                            return done(null, newUser, req.flash('loginMessage', 'Successfully created user account with google.'));
                         });
                     }
                 });
@@ -137,7 +150,7 @@ module.exports = function(passport) {
                         }
                         return done(null, false);
                     }
-                    return done(null, user);
+                    return done(null, user, req.flash('loginMessage', 'Successfully added google account.'));
                 });
             }
         });

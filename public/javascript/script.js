@@ -9,11 +9,11 @@ var BeerStash = {
 			var id = $(this).closest('.row').data('user-beer');
 			
 			if($(this).hasClass('inc')){
-				var target = $(this).closest('.row').find('input');
+				var target = $(this).closest('.row').find('input').eq(0);
 				self.updateUserBeer(id, 'inc', target);
 			}
 			if($(this).hasClass('dec')){
-				var target = $(this).closest('.row').find('input');
+				var target = $(this).closest('.row').find('input').eq(0);
 				self.updateUserBeer(id, 'dec', target);
 			}
 			if($(this).hasClass('delconf')){
@@ -35,6 +35,12 @@ var BeerStash = {
 			},
 			success: function (data) {
 				t.val(data.newValue);
+				var color = (a == 'dec') ? '#cc6666' : '#66cc66';
+				t.animate({backgroundColor:color}, 500, 'linear', function(){
+					t.animate({backgroundColor: '#ffffff'}, 500, 'linear', function(){
+
+					});
+				});
 			}
 		});
 	},
