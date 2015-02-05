@@ -23,7 +23,7 @@ mongoose.connection.on('error', console.error.bind(console, 'connection error:')
 });
 */
 require('./config/passport_config')(passport);
-app.use(compress());
+//app.use(compress());
 app.use(expressLayouts);
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.urlencoded({'extended':'true'}));
