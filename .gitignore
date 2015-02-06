@@ -27,7 +27,6 @@ node_modules
 # Users Environment Variables
 .lock-wscript
 
-
 brwery_db_cfg.js
 flickr_cfg.js
 google_cfg.js

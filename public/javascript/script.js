@@ -1,6 +1,10 @@
 var BeerStash = {
 	init : function(){
 		this.binds();
+		if(!(navigator && navigator.onLine)) {
+			this.putOffline();
+		}
+		this.offlineChecker();
 	},
 	binds : function(){
 		var self = this;
@@ -23,6 +27,33 @@ var BeerStash = {
 				self.deleteUserBeer(id, e.target);
 			}
 		});
+		window.addEventListener('offline', function(e){
+		 	self.putOffline();
+		},false);
+
+		window.addEventListener('online', function(e){
+			self.putOnline();
+		},false);
+	},
+	offlineChecker : function(){
+		setTimeout(function () {
+			$.ajax({
+				type: 'get',
+				url: '/offlinecheck',
+				success: function(msg){
+					console.log('still online');
+					BeerStash.putOnline();
+				},
+				error: function(XMLHttpRequest, textStatus, errorThrown) {
+					console.log('might be offline');
+					if(textStatus == 'timeout'){
+						console.log('probably offline');
+						BeerStash.putOffline();
+					}
+				}
+			});
+			BeerStash.offlineChecker();
+		}, 5000);
 	},
 	updateUserBeer : function(id, a, t){
 		$.ajax({
@@ -70,6 +101,14 @@ var BeerStash = {
 				});
 			}
 		});
+	},
+	
+	putOffline : function(){
+		$('#offline-cover').fadeIn(200);
+	},
+	
+	putOnline : function(){
+		$('#offline-cover').fadeOut(200);	
 	}
 }
 

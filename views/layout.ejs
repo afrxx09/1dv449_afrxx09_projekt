@@ -1,9 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" manifest="/cache.manifest">
     <head>
         <% include partials/head %>
     </head>
     <body>
+        <div id="offline-cover">
+            <div id="offline-container">
+                <h2>You are offline</h2>
+                <p>This application doesn't support offline use</p>
+                <p>Wait untill you get reconnected or visit later</p>
+                <p><img src="/images/loading.gif" alt="loading" /></p>
+            </div>
+        </div>
         <% include partials/header %>
         <div class="container">
             <div id="main-content">

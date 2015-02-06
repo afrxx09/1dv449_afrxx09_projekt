@@ -9,7 +9,7 @@ var flash = require('connect-flash');
 var compress = require('compression');
 
 var mongodbString = process.env.MONGOLAB_URI || 'mongodb://localhost:27017/beer';
-var port = process.env.PORT || 5000;
+var port = process.env.PORT || 3000;
 var app = express();
 
 mongoose.connect(mongodbString, function (err, res) {
@@ -18,10 +18,6 @@ mongoose.connect(mongodbString, function (err, res) {
 });
 mongoose.connection.on('error', console.error.bind(console, 'connection error:'));
 
-/*mongoose.connection.on('error', function(){
-	console.log('mongoose error');
-});
-*/
 require('./config/passport_config')(passport);
 //app.use(compress());
 app.use(expressLayouts);

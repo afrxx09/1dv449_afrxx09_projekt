@@ -5,16 +5,30 @@ var brewerydbC = require('./webservices/brewerydb');
 var userBeer = require('./models/user_beer');
 
 module.exports = function(app, passport){
+	
+	app.get("/cache.manifest", function(req, res){
+		res.header('Content-Type', 'text/cache-manifest');
+		res.Header('Cache-Control', 'public, max-age=0');
+		res.Header('ExpiresActive', 'On');
+		res.Header('ExpiresDefault', 'access');
+		res.send();
+	});
+	
 	app.get('*', function(req, res, next) {
 		//res.setHeader('Cache-Control', 'public, max-age=31557600');
 		res.locals.user = req.user || null;
 		next();
 	});
+	
 	app.post('*', function(req, res, next) {
 		res.locals.user = req.user || null;
 		next();
 	});
-
+	
+	app.get('/offlinecheck', function(req, res){
+		res.status(200).send();
+	});
+	
 	app.get('/unlink/local', isLoggedIn, function(req, res){
 		var user = req.user;
 		user.local.email = undefined;
