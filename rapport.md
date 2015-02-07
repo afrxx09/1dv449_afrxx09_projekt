@@ -1,6 +1,25 @@
 #Projektrapport 1dv449
 Andreas Fridlund - afrxx09
 
+#Uppdatering - Komplettering
+Har haft enorma problem med att applikationen krashar när jag publicerar den på heroku, den beter sig inte alls som på lokal miljö troligtvis pga av hur deras servrar är konfigurerade. Då github inte verkar vilja ge mig något studentkonto så jag får tillgång till andra hosting-alternativ.
+
+####ingrepp och åtgärder
+Jag har slipat mycket på det grafiska gränsnittet, Lagt in mer texter och gjort att sidan känns mer "färdig".
+
+Det är mycket mer varningsmeddelanden och notiser nu jämfört med tidigare. 
+
+Den är offline-"anpassad", till den grad att den varnar användaren när det inte finns någon internetanslutning längre. Det kommer upp en stor heltäckande varning som hindrar användaren från att använda applikationen till dess att internet anslutning återigen finns tillgänglig.
+För att verkligen försäkra om att applikationen "pausas" när användaren går offline har jag tagit till 3 metoder. Först kontrollerar den direkt när sidan laddas om användaren är online. Jag har även kopplat javascript listeners som ska känna av om användren plötsligt går offline. Till sist har jag implementerat ett litet long-polling script som hela tiden ligger och frågar servern om man är online eller inte.
+
+Det finns kod som använder cachning och manifest-filer för att göra att sidan ska fungera även i offline-läge, men de cachade sidorna beter sig väldigt märkligt så jag har valt att ta bort det stödet för närvarande. De buggarna som dyker upp när man kör med cache är följande:
+
+*Notiser som visas första gången blir permanenta och nya notiser visas aldrig.
+*Menyn som visar olika alternativ beroende på om man är inloggad eller inte blir statisk istället och gör navigeringen i applikationen obrukbar.
+*Sökning och sökresultat på sidan blir också cachade då de renderas ut vid sid-laddning och inte dynamiskt via ajax.
+
+För att slå på cachning behöver man bara använda den bortkommenterade html-taggen på rad 2 i "views/layout.ejs" som är min HTML-template för hela applikationen.
+
 ##Inledning
 I brist på fantasi blev det en applikation där man kan hantera ett öl-lager. Efter att ha letat och läst om diverse API:er i över två dagar, kunde jag fortfarande inte komma på någon bra idé att göra en applikation om. Det var svårt att hitta 2 bra, tillförlitliga och intressanta API:er, samt att det var svårt att komma på en applikation som kunde använda datan på ett relevant sätt. Då jag inte kom på någon bra idé och började känna stressen så fick jag nöja mig med en dålig applikations-idé och bara börja. Värt att nämna också är att jag inte ville använda google maps som en av de två datakällorna, då det kändes lite tråkigt och som en för enkel utväg. Jag känner inte till några andra applikationer av detta slaget.
 
@@ -29,6 +48,9 @@ Prestandan höjs en aning genom att gzip används och cache är påslaget. Exter
 
 ##Offline-first
 Då hela min applikation ligger bakom inloggning och varje request kontrolleras så har jag haft svårt att klura ut hur detta skulle appliceras. Jag har ingen direkt intressant data att manipulera i ett offline-läge då det mesta handlar om att söka efter information(öl). Min applikation är väldigt fokuserad på serversidan vilket gör det svårt att mellan-lagra data på klienten.
+
+####Uppdatering Offline-first
+Applikationen tar nu hänsyn till om en användare går offline. läs mer längs upp i dokumentet under "Uppdatering - Komplettering".
 
 ##Reflektion
 Det har varit en stor utmaning detta projektet. Att sammanfoga alla kraven till en vettig idé och en bra applikation har varit mitt största problem och såhär i efterhan även nederlag. Två datakällor, offline-first, oauth blev för mycket för att komma på en vettig idé i tid. Så jag är inte speciellt nöjd med min applikation och kommer inte jobba alls på att utveckla den vidare. Jag hade velat komma på ett vettigt sätt att implementera offline-first. Jag påbörjade, men skrotade pga tidsbrist funktionalitet kring att skaffa vänner i applikationen vilket hade vart trevligt att implementera.
