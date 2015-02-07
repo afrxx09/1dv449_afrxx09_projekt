@@ -67,8 +67,8 @@ var BeerStash = {
 			success: function (data) {
 				t.val(data.newValue);
 				var color = (a == 'dec') ? '#cc6666' : '#66cc66';
-				t.animate({backgroundColor:color}, 500, 'linear', function(){
-					t.animate({backgroundColor: '#ffffff'}, 500, 'linear', function(){
+				t.animate({backgroundColor:color}, 100, 'linear', function(){
+					t.animate({backgroundColor: '#ffffff'}, 100, 'linear', function(){
 
 					});
 				});

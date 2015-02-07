@@ -60,24 +60,14 @@ module.exports = function(app, passport){
 	}));
 	app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
 	app.get('/auth/google/callback', passport.authenticate('google', {
-		successRedirect : '/',
+		successRedirect : '/stash',
 		failureRedirect : '/login',
 		falureFlash: true
 	}));
 
 	var router = express.Router();
 	router.route('/').get(function(req, res){
-		if(req.user){
-			userBeer.find({user : req.user._id}).populate('beer').exec(function(err, stash){
-				if(err) res.render('index', { beer_search : null, 'stash' : [], message : req.flash('loginMessage') });
-				else{
-					res.render('index', { beer_search : null, 'stash' : stash, message : req.flash('loginMessage') });
-				}
-			});
-		}
-		else{
-			res.render('index', { beer_search : null, 'stash' : [], message : req.flash('loginMessage') });
-		}
+		res.render('index', { message : req.flash('loginMessage') });
 	});
 	router.route('/profile')
 		.get(isLoggedIn, userC.getProfile)
@@ -85,7 +75,7 @@ module.exports = function(app, passport){
 	router.route('/signup')
 		.get(userC.signupForm)
 		.post(passport.authenticate('local-signup', {
-			successRedirect: '/',
+			successRedirect: '/stash',
 			failureRedirect: '/signup',
 			falureFlash: true
 		}));
@@ -94,18 +84,27 @@ module.exports = function(app, passport){
 			res.render('login', {message : req.flash('loginMessage')});
 		})
 		.post(passport.authenticate('local-login', {
-			successRedirect : '/',
+			successRedirect : '/stash',
 			failureRedirect : '/login',
 			falureFlash: true
 		}));
 	router.route('/logout').get(function(req, res) { req.logout(); res.redirect('/'); });
 
 	router.route('/search').get(isLoggedIn, beerC.search);
+	router.route('/stash').get(isLoggedIn, function(req, res){
+		userBeer.find({user : req.user._id}).populate('beer').exec(function(err, stash){
+			if(err) res.render('stash', { beer_search : null, 'stash' : [], message : req.flash('loginMessage') });
+			else{
+				res.render('stash', { beer_search : null, 'stash' : stash, message : req.flash('loginMessage') });
+			}
+		});
+	});
 	router.route('/addtostash/:beer_id').post(isLoggedIn, userC.addBeerToStash);
 	router.route('/updateuserstash').post(isLoggedIn, function(req, res){
 		userBeer.findOne({_id: req.body.id}, function(err, ub){
 			if(err) res.status(500).send();
-			ub.quantity = (req.body.a == 'inc') ? ub.quantity + 1 : ub.quantity - 1;
+			var newQuantity = (req.body.a == 'inc') ? ub.quantity + 1 : ub.quantity - 1;
+			ub.quantity = (newQuantity < 0) ? 0 : newQuantity;
 			ub.save(function(err){
 				if(err) res.status(500).send();
 				res.json({newValue : ub.quantity});

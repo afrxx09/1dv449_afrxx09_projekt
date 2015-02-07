@@ -1,9 +1,10 @@
 CACHE MANIFEST
-#version 0.07
+#version 0.13
 /css/styles.css
 /javascript/script.js
 /images/no_image_beer.png
 /images/loading.gif
 /images/offline-bg.png
+
 NETWORK:
 *
